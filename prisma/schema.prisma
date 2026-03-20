@@ -15,3 +15,24 @@ datasource db {
   extensions =[vector]
 }
 
+model Document{
+  id String  @id @default(cuid())
+  content String
+  title String
+  chunk  DocumentChunks[]
+  indexed Boolean @default(false)
+  metaData Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DocumentChunks{
+  id String @default(cuid()) @id
+  documentId String
+  content String
+  embedding Unsupported("vector(1536)")
+  chunkInt  Int
+  createdAt DateTime @default(now())
+  document Document @relation(references: [id],fields: [documentId], onDelete: Cascade)
+
+}
