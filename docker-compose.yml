@@ -1,0 +1,16 @@
+services:
+    db:
+        image: ankane/pgvector
+        container_name: search_engine
+        restart: always
+        environment:
+              POSTGRES_USER: xsuser
+              POSTGRES_PASSWORD: xspassword
+              POSTGRES_DB: xsdb
+        ports:
+          - 5434:5432
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
