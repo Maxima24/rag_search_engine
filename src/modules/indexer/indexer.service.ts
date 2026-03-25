@@ -1,34 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { InjectQueue } from "@nestjs/bull";
+import type { Queue } from "bull";
 
-interface ChunkObject {
-  chunkIndex: number;
-  content: string;
-}
-@Injectable()
-export class IndexerService {
-  private readonly chunkSize;
-  private readonly chunkOverlap;
-  constructor() {
-    this.chunkSize = parseInt(process.env.CHUNK_SIZE ?? '500');
-    this.chunkOverlap = parseInt(process.env.CHUNCK_OVERLAP ?? '50');
-  }
+export class IndexerService{
+     
+    constructor (@InjectQueue('indexer') private readonly indexerQueue: Queue){}
+    async queueDocuments(documentId:string){
+        await this.indexerQueue.add("index-document",{documentId},{
+            attempts:3,
+            backoff:{
+                type:'exponential',
+                delay:2000,
 
-  chunk(text: string): ChunkObject[] {
-    const words = text.split(/\s+/).filter(Boolean);
-    const chunks: ChunkObject[] = [];
-    let i = 0;
-    let chunkIndex = 0;
-    while (i< words.length){
-        const chunk_word = words.splice(i,i+this.chunkSize)
-        chunks.push({
-            content:chunk_word.join(""),
-            chunkIndex: chunkIndex++
+            },
+            removeOnComplete:true
         })
-
-        i += this.chunkSize-this.chunkOverlap
-        
-   
     }
-    return chunks
-  }
 }

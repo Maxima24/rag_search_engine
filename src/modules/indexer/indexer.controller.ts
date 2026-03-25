@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
-import { IndexerService } from './indexer.service';
+import { ChunkerService } from './chunker.service';
 
 @Controller('indexer')
 export class IndexerController {
-  constructor(private readonly indexerService: IndexerService) {}
+  constructor(private readonly indexerService: ChunkerService) {}
 }

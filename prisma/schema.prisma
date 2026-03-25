@@ -30,9 +30,17 @@ model DocumentChunks{
   id String @default(cuid()) @id
   documentId String
   content String
-  embedding Unsupported("vector(1536)")
-  chunkInt  Int
+  embedding Unsupported("vector(384)")
+  chunkIndex  Int
   createdAt DateTime @default(now())
   document Document @relation(references: [id],fields: [documentId], onDelete: Cascade)
 
+}
+model Analytics{
+  id String @default(cuid()) @id
+  query String
+  resultCount Int
+  responseTime Int
+  threshold Float
+  createdAt DateTime @default(now())
 }
