@@ -19,8 +19,8 @@ CREATE TABLE "DocumentChunks" (
     "id" TEXT NOT NULL,
     "documentId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "embedding" vector(1536) NOT NULL,
-    "chunkInt" INTEGER NOT NULL,
+    "embedding" vector(384) NOT NULL,
+    "chunkIndex" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "DocumentChunks_pkey" PRIMARY KEY ("id")

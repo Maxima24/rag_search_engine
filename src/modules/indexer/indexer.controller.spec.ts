@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IndexerController } from './indexer.controller';
-import { IndexerService } from './indexer.service';
+import { IndexerService } from './chunker.service';
 
 describe('IndexerController', () => {
   let controller: IndexerController;
