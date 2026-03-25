@@ -2,8 +2,10 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmbeddingService } from '../indexer/embedder.service';
 import { CreateSearchDto } from './dto/search.dto';
+import {EventEmitter2} from "@nestjs/event-emitter"
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from '@nestjs/cache-manager';
+import { SearchEvent } from '../analytics/events/search.event';
 
 export interface ChunkResult {
   id: string;
@@ -35,10 +37,12 @@ export class SearchService {
   constructor(
     private readonly db: PrismaService,
     private readonly embedder: EmbeddingService,
+    private readonly emitter: EventEmitter2,
     @Inject(CACHE_MANAGER) private readonly cache:Cache
   ) {}
   async search(dto: CreateSearchDto) {
     const { q, limit, threshold } = dto;
+    const start = Date.now()
 
     /// Check in Cache fror Query
     const cacheKey = `search:${q.toLowerCase().trim()}:${limit ??5}:${threshold ?? 75}`
@@ -77,8 +81,13 @@ export class SearchService {
       documents:this.groupByDocument(results)
     }
       await this.cache.set(cacheKey,response)
+      this.emitter.emit(
+       'search.completed', new SearchEvent(q,results.length,Date.now() - start,threshold??75)
+      )
     return response
   }
+
+
   private groupByDocument(chunks:ChunkResult[]){
     const map = new Map<string,{
         documentId:string,

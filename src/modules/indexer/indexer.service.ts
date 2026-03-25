@@ -1,10 +1,12 @@
 import { InjectQueue } from "@nestjs/bull";
+import { Injectable } from "@nestjs/common";
 import type { Queue } from "bull";
 
+@Injectable()
 export class IndexerService{
      
     constructor (@InjectQueue('indexer') private readonly indexerQueue: Queue){}
-    async queueDocuments(documentId:string){
+    async queueDocument(documentId:string){
         await this.indexerQueue.add("index-document",{documentId},{
             attempts:3,
             backoff:{
