@@ -19,8 +19,9 @@ export class DocumentsService {
                 metaData:dto.metaData ?? Prisma.JsonNull
             }
         })
-        
-        await this.indexer.queueDocuments(document.id)
+        console.log('=== STEP 2: document created, id:', document.id, '===');
+        await this.indexer.queueDocument(document.id)
+        console.log('=== STEP 3: job queued ===');
         return{
             id:document.id,
             title:document.title,
@@ -44,7 +45,7 @@ export class DocumentsService {
                 }
             },
         })
-        if(!document) throw new NotFoundException( `Document ${id} not found`);
+        if(!doc) throw new NotFoundException( `Document ${id} not found`);
         return doc
     }
     public async findAll(){

@@ -11,6 +11,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { IndexerModule } from './modules/indexer/indexer.module';
 import { SearchModule } from './modules/search/search.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { SearchModule } from './modules/search/search.module';
     PrismaModule,
     DocumentsModule,
     IndexerModule,
-    SearchModule
+    SearchModule,
+    AnalyticsModule
   ],
   controllers: [AppController],
   providers: [AppService,PrismaService],

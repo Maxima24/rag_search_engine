@@ -25,4 +25,18 @@ export class AnalyticsService {
             take:10
         })
     }
+
+    async getSummary(){
+        const [total,avgResponseTime,searchResultQueries]=await  Promise.all([
+            this.db.analytics.count(),
+            this.db.analytics.aggregate({
+                _avg:{responseTime:true}
+            }),
+            this.db.analytics.count({
+                where:{
+                    resultCount:0
+                }
+            })
+        ])
+    }
 }

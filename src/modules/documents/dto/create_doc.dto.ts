@@ -1,9 +1,10 @@
-import {IsObject, IsString} from "class-validator"
+import {IsObject, IsOptional, IsString} from "class-validator"
 export class CREATEDOCDTO{
  
     @IsString()
     content: string
     @IsString()
     title:string
-    metaData : Record<string,any>
+    @IsOptional()
+    metaData ?: Record<string,any>
 }

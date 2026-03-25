@@ -13,6 +13,7 @@ constructor(private readonly analyticsService:AnalyticsService){}
 @OnEvent('search.completed')
 async handleSearchComplete(event:SearchEvent){
     this.logger.log(` Recording analytics for query "${event.query}"`)
+    await this.analyticsService.record(event)
 
 }
 
